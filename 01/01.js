@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
 
-// definição da classe Vertice
+
 class Vertice {
   #x; // atributo privado para armazenar a coordenada x
   #y; // atributo privado para armazenar a coordenada y
@@ -28,11 +28,13 @@ class Vertice {
     return Math.sqrt(distX ** 2 + distY ** 2);
   }
 
+  // método para mover o vértice para novas coordenadas
   move(novoX, novoY) {
     this.#x = novoX;
     this.#y = novoY;
   }
 
+  // método para verificar se dois vértices são iguais
   equals(vertice2) {
     if (this.#x === vertice2.#x && this.#y === vertice2.#y) {
       return "sim";
@@ -42,31 +44,33 @@ class Vertice {
   }
 }
 
+// função para criar vértices com base nas entradas do usuário
 function criarVertice() {
   inquirer
     .prompt([
       {
         type: "input",
         name: "x1",
-        message: "Digite a cornenada x do primeiro vértice: ",
+        message: "digite a coordenada x do primeiro vértice: ",
       },
       {
         type: "input",
         name: "y1",
-        message: "Digite a cornenada y do primeiro vértice: ",
+        message: "digite a coordenada y do primeiro vértice: ",
       },
       {
         type: "input",
         name: "x2",
-        message: "Digite a cornenada x do segundo vértice: ",
+        message: "digite a coordenada x do segundo vértice: ",
       },
       {
         type: "input",
         name: "y2",
-        message: "Digite a cornenada y do segundo vétice: ",
+        message: "digite a coordenada y do segundo vértice: ",
       },
     ])
     .then((answers) => {
+      // cria instâncias da classe Vertice com base nas respostas do usuário
       const primeiroVertice = new Vertice(
         Number(answers.x1),
         Number(answers.y1)
@@ -75,19 +79,18 @@ function criarVertice() {
         Number(answers.x2),
         Number(answers.y2)
       );
-      const distanceEntreVertices = primeiroVertice.distancia(segundoVertice);
+      const distanciaEntreVertices = primeiroVertice.distancia(segundoVertice);
 
-      //primeiroVertice.move(4, 40)
-
-      console.log(`Vertice1 criado: 
+      console.log(`vertice1 criado: 
         x: ${primeiroVertice.getX()} y: ${primeiroVertice.getY()}`);
-      console.log(`Vertice2 criado: 
+      console.log(`vertice2 criado: 
         x: ${segundoVertice.getX()} y: ${segundoVertice.getY()}`);
-      console.log(`Distancia entre os vertices: ${distanceEntreVertices}`);
+      console.log(`distancia entre os vertices: ${distanciaEntreVertices}`);
       console.log(
-        `São vertices iguais? ${primeiroVertice.equals(segundoVertice)}.`
+        `são vertices iguais? ${primeiroVertice.equals(segundoVertice)}.`
       );
     });
 }
 
+// chama a função para criar vértices com base nas entradas do usuário
 criarVertice();
