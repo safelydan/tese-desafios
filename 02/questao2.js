@@ -1,24 +1,35 @@
 import inquirer from "inquirer";
+// import Vertice from "../01/questao1.js"
 
 class Triangulo {
-  #x;
-  #y;
-  #z;
+  #verticeX;
+  #verticeY;
+  #verticeZ;
 
-  constructor(x, y, z) {
-    this.#x = x;
-    this.#y = y;
-    this.#z = z;
+  constructor(verticeX, verticeY, verticeZ) {
+    this.#verticeX = verticeX;
+    this.#verticeY = verticeY;
+    this.#verticeZ = verticeZ;
   }
 
   getX() {
-    return this.#x;
+    return this.#verticeX;
   }
   getY() {
-    return this.#y;
+    return this.#verticeY;
   }
   getZ() {
-    return this.#z;
+    return this.#verticeZ;
+  }
+
+  verificaTriangulo(vertice1, vertice2, vertice3){
+    const ladoX = vertice1.distancia(vertice2)
+    const ladoY = vertice1.distancia(vertice3)
+    const ladoZ = vertice2.distancia(vertice3)
+
+    if(ladoX + ladoY > ladoZ && ladoX + ladoZ > ladoY && ladoY + ladoZ > ladoX){
+      console.log(`eh um triangulo`)
+    }
   }
 
   equals(triangulo2) {
@@ -41,31 +52,31 @@ class Triangulo {
 function criarTriangulo() {
   inquirer
   .prompt([
-    { type: "input", name: "x1", message: "digite o lado x do triângulo 1: " },
-    { type: "input", name: "y1", message: "digite o lado y do triângulo 1: " },
-    { type: "input", name: "z1", message: "digite o lado z do triângulo 1: " },
-    { type: "input", name: "x2", message: "digite o lado x do triângulo 2: " },
-    { type: "input", name: "y2", message: "digite o lado y do triângulo 2: " },
-    { type: "input", name: "z2", message: "digite o lado z do triângulo 2: " },
-    { type: "input", name: "x3", message: "digite o lado x do triângulo 3: " },
-    { type: "input", name: "y3", message: "digite o lado y do triângulo 3: " },
-    { type: "input", name: "z3", message: "digite o lado z do triângulo 3: " },
+    { type: "input", name: "verticeX1", message: "digite o lado x do triângulo 1: " },
+    { type: "input", name: "verticeY1", message: "digite o lado y do triângulo 1: " },
+    { type: "input", name: "verticeZ1", message: "digite o lado z do triângulo 1: " },
+    { type: "input", name: "verticeX2", message: "digite o lado x do triângulo 2: " },
+    { type: "input", name: "verticeY2", message: "digite o lado y do triângulo 2: " },
+    { type: "input", name: "verticeZ2", message: "digite o lado z do triângulo 2: " },
+    { type: "input", name: "verticeX3", message: "digite o lado x do triângulo 3: " },
+    { type: "input", name: "verticeY3", message: "digite o lado y do triângulo 3: " },
+    { type: "input", name: "verticeZ3", message: "digite o lado z do triângulo 3: " },
   ])
     .then((answers) => {
       const triangulo1 = new Triangulo(
-        Number(answers.x1),
-        Number(answers.y1),
-        Number(answers.z1)
+        Number(answers.verticeX1),
+        Number(answers.verticeY1),
+        Number(answers.verticeZ1)
       );
       const triangulo2 = new Triangulo(
-        Number(answers.x2),
-        Number(answers.y2),
-        Number(answers.z2)
+        Number(answers.verticeX2),
+        Number(answers.verticeY2),
+        Number(answers.verticeZ2)
       );
       const triangulo3 = new Triangulo(
-        Number(answers.x3),
-        Number(answers.y3),
-        Number(answers.z3)
+        Number(answers.verticeX3),
+        Number(answers.verticeY3),
+        Number(answers.verticeZ3)
       );
       console.log(`triângulo 1 
       x: ${triangulo1.getX()} y: ${triangulo1.getY()} z: ${triangulo1.getZ()}`);
