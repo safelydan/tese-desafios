@@ -22,11 +22,9 @@ class Vertice {
 
   // método para calcular a distância euclidiana entre dois vértices
   distancia(vertice2, vertice3) {
-    const distX2 = this.#x - vertice2.getX();
-    const distY2 = this.#y - vertice2.getY();
-    const distX3 = this.#x - vertice3.getX();
-    const distY3 = this.#y - vertice3.getY();
-    return Math.sqrt(distX2 ** 2 + distY2 ** 2 + distX3 ** 2 + distY3 ** 2);
+    const distancia1 = this.#x - vertice2.getX();
+    const distancia2 = this.#y - vertice2.getY();
+    return Math.sqrt(distancia1 ** 2 + distancia2 ** 2);
   }
 
   // método para mover o vértice para novas coordenadas
