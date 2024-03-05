@@ -20,19 +20,50 @@ class Triangulo {
     this.#vertice3 = vertice3;
   }
 
-  // retorna o primeiro vértice do triângulo
-  getVertice1() {
+  get vertice1() {
     return this.#vertice1;
   }
 
-  // retorna o segundo vértice do triângulo
-  getVertice2() {
+  get vertice2() {
     return this.#vertice2;
   }
 
-  // retorna o terceiro vértice do triângulo
-  getVertice3() {
+  get vertice3() {
     return this.#vertice3;
+  }
+
+  get perimetro() {
+    const lado1 = this.#vertice1.distancia(this.#vertice2);
+    const lado2 = this.#vertice1.distancia(this.#vertice3);
+    const lado3 = this.#vertice2.distancia(this.#vertice3);
+    return lado1 + lado2 + lado3;
+  }
+
+  tipo() {
+    const lado1 = this.#vertice1.distancia(this.#vertice2);
+    const lado2 = this.#vertice1.distancia(this.#vertice3);
+    const lado3 = this.#vertice2.distancia(this.#vertice3);
+
+    if (lado1 === lado2 && lado2 === lado3) {
+      return "equilátero";
+    } else if (lado1 === lado2 || lado1 === lado3 || lado2 === lado3) {
+      return "isósceles";
+    } else {
+      return "escaleno";
+    }
+  }
+
+  clone() {
+    return new Triangulo(this.#vertice1, this.#vertice2, this.#vertice3);
+  }
+
+  get area() {
+    const lado1 = this.#vertice1.distancia(this.#vertice2);
+    const lado2 = this.#vertice1.distancia(this.#vertice3);
+    const lado3 = this.#vertice2.distancia(this.#vertice3);
+    const semiPerimetro = this.perimetro / 2;
+    const area = Math.sqrt(semiPerimetro * (semiPerimetro - lado1) * (semiPerimetro - lado2) * (semiPerimetro - lado3));
+    return area;
   }
 
   verificarTriangulo() {
@@ -48,10 +79,8 @@ class Triangulo {
   }
 }
 
-// função assíncrona para criar um triângulo interativamente
 async function criarTrianguloUmPorUm(nomeTriangulo) {
   try {
-    // solicita ao usuário as coordenadas dos vértices
     const answers = await inquirer.prompt([
       { type: "input", name: "x1", message: `digite a coordenada x do ${nomeTriangulo}: ` },
       { type: "input", name: "y1", message: `digite a coordenada y do ${nomeTriangulo}: ` },
@@ -61,37 +90,54 @@ async function criarTrianguloUmPorUm(nomeTriangulo) {
       { type: "input", name: "y3", message: `digite a coordenada y do ${nomeTriangulo}: ` },
     ]);
 
-    // cria instâncias da classe Vertice com base nas respostas do usuário
     const v1 = new Vertice(Number(answers.x1), Number(answers.y1));
     const v2 = new Vertice(Number(answers.x2), Number(answers.y2));
     const v3 = new Vertice(Number(answers.x3), Number(answers.y3));
 
-    // cria um triângulo com os vértices fornecidos
     const triangulo = new Triangulo(v1, v2, v3);
 
-    // imprime as coordenadas dos vértices e verifica se é um triângulo válido
-    console.log(`${nomeTriangulo}:`);
-    imprimirTriangulo(triangulo);
+    console.log(`${nomeTriangulo}:
+    ------------ 
+    vértice 1: ${triangulo.vertice1.getX()}, ${triangulo.vertice1.getY()}
+    vértice 2: ${triangulo.vertice2.getX()}, ${triangulo.vertice2.getY()}
+    vértice 3: ${triangulo.vertice3.getX()}, ${triangulo.vertice3.getY()}
+    ------------`);
+    triangulo.verificarTriangulo();
+
+    return triangulo;
   } catch (error) {
-    // captura erros durante o processo e imprime a mensagem de erro
     console.log(error.message);
   }
 }
 
-// imprime as coordenadas dos vértices e verifica se é um triângulo válido
-function imprimirTriangulo(triangulo) {
-  console.log(`vértice 1: ${triangulo.getVertice1().getX()}, ${triangulo.getVertice1().getY()}`);
-  console.log(`vértice 2: ${triangulo.getVertice2().getX()}, ${triangulo.getVertice2().getY()}`);
-  console.log(`vértice 3: ${triangulo.getVertice3().getX()}, ${triangulo.getVertice3().getY()}`);
-  triangulo.verificarTriangulo();
-}
-
-// função para criar três triângulos um por um
 async function criarTriangulo() {
-  await criarTrianguloUmPorUm("triângulo 1");
-  await criarTrianguloUmPorUm("triângulo 2");
-  await criarTrianguloUmPorUm("triângulo 3");
+  try {
+    const triangulo1 = await criarTrianguloUmPorUm("triângulo 1");
+    const triangulo2 = await criarTrianguloUmPorUm("triângulo 2");
+    const triangulo3 = await criarTrianguloUmPorUm("triângulo 3");
+
+    console.log(`Resultados:
+    ------------ 
+    triangulo 1:
+    ------------ 
+    ${imprimirResultados(triangulo1)}
+    triangulo 2:
+    ------------
+    ${imprimirResultados(triangulo2)}
+    triangulo 3:
+    ------------
+    ${imprimirResultados(triangulo3)}`);
+
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
-// chama a função para criar os triângulos
+function imprimirResultados(triangulo) {
+  return `tipo: ${triangulo.tipo()}
+  perímetro: ${triangulo.perimetro}
+  área: ${triangulo.area}
+  --------------------`;
+}
+
 criarTriangulo();
