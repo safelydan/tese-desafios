@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-// import Vertice from "../01/questao1.js"
+//import Vertice from "../01/questao1.js"
 
 class Triangulo {
   #verticeX;
@@ -12,13 +12,13 @@ class Triangulo {
     this.#verticeZ = verticeZ;
   }
 
-  getX() {
+  getVerticeX() {
     return this.#verticeX;
   }
-  getY() {
+  getVerticeY() {
     return this.#verticeY;
   }
-  getZ() {
+  getVerticeZ() {
     return this.#verticeZ;
   }
 
@@ -32,11 +32,14 @@ class Triangulo {
     }
   }
 
-  equals(triangulo2) {
+  equals(triangulo2, triangulo3) {
     if (
-      this.getX() === triangulo2.getX() &&
-      this.getY() === triangulo2.getY() &&
-      this.getZ() === triangulo2.getZ()
+      this.getVerticeX() === triangulo2.getVerticeX() &&
+      this.getVerticeY() === triangulo2.getVerticeY() &&
+      this.getVerticeZ() === triangulo2.getVerticeZ() && 
+      this.getVerticeX() === triangulo3.getVerticeX() &&
+      this.getVerticeY() === triangulo3.getVerticeY() &&
+      this.getVerticeZ() === triangulo3.getVerticeZ() 
     ) {
       return "sim";
     } else {
@@ -79,12 +82,12 @@ function criarTriangulo() {
         Number(answers.verticeZ3)
       );
       console.log(`triângulo 1 
-      x: ${triangulo1.getX()} y: ${triangulo1.getY()} z: ${triangulo1.getZ()}`);
+      x: ${triangulo1.getVerticeX()} y: ${triangulo1.getVerticeY()} z: ${triangulo1.getVerticeZ()}`);
       console.log(`triângulo 2 
-      x: ${triangulo2.getX()} y: ${triangulo2.getY()} z: ${triangulo2.getZ()}`);
+      x: ${triangulo2.getVerticeX()} y: ${triangulo2.getVerticeY()} z: ${triangulo2.getVerticeZ()}`);
       console.log(`triângulo 3 
-      x: ${triangulo3.getX()} y: ${triangulo3.getY()} z: ${triangulo3.getZ()}`);
-      console.log(`os triângulos são iguais? ${triangulo1.equals(triangulo2)}`);
+      x: ${triangulo3.getVerticeX()} y: ${triangulo3.getVerticeY()} z: ${triangulo3.getVerticeZ()}`);
+      console.log(`os triângulos são iguais? ${triangulo1.equals(triangulo2, triangulo3)}`);
     });
 }
 
