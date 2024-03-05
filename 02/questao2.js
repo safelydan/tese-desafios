@@ -15,8 +15,6 @@ class Triangulo {
       throw new Error("parametros devem ser instancias da classe vertice ");
     }
 
-
-
     if (
       !(lado1 + lado2 > lado3 && lado1 + lado3 > lado2 && lado2 + lado3 > lado1)
     ) {
@@ -51,5 +49,33 @@ class Triangulo {
       return `eh um triangulo`
     }
   }
+
+  criarTriangulo(){
+    inquirer.prompt([{type: "input", name: "x1", message: "x1: " }])
+    inquirer.prompt([{type: "input", name: "y1", message: "y2: " }])
+    inquirer.prompt([{type: "input", name: "x2", message: "x2" }])
+    inquirer.prompt([{type: "input", name: "y2", message: "y2" }])
+    inquirer.prompt([{type: "input", name: "x3", message: "x3" }])
+    inquirer.prompt([{type: "input", name: "y3", message: "y3" }])
+    .then((answers)=>{
+      try{
+        const v1 = new Vertice(Number(answers.x1), Number(answers.y1))
+        const v2 = new Vertice(Number(answers.x2), Number(answers.y2))
+        const v3 = new Vertice(Number(answers.x3), Number(answers.y3))
+        const triangulo = new Triangulo(v1, v2, v3)
+
+        console.log(``)
+
+
+        triangulo.confereTriangulo();
+      }catch(error){
+        console.log(error.message)
+      }
+    })
+
+
+  }
 }
 
+
+criarTriangulo()

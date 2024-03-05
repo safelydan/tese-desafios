@@ -72,3 +72,5 @@ function criarVertice() {
 
 // chama a função para criar vértices com base nas entradas do usuário
 criarVertice();
+
+export default Vertice;
