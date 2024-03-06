@@ -37,6 +37,7 @@ class Vertice {
       return "Não";
     }
   }
+
 }
 
 function criarVertice() {
