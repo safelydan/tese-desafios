@@ -68,7 +68,6 @@ imprimirAlunosEmOrdemAlfabetica() {
 const turma = new Turma();
 const aluno1 = new Aluno(2, "Joao Pedro");
 const aluno2 = new Aluno(1, "Eandro Cleiton");
-const aluno3 = new Aluno(1, "Eandro Cleiton");
 
 turma.adicionarAluno(aluno1);
 turma.adicionarAluno(aluno2);

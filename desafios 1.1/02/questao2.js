@@ -120,7 +120,7 @@ async function criarTriangulo() {
 
     console.log(`Resultados:
 
-Triângulo 1:`);
+  Triângulo 1:`);
     imprimirResultados(triangulo1, 1);
     
     console.log(`Triângulo 2:`);
