@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import Paciente from "./Paciente.js";
+import Paciente from "../models/Paciente.js";
 
 const perguntas = [
   {

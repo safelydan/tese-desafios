@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
-import { cadastrarPaciente } from "./CadastroPaciente.js";
-import Paciente from "./Paciente.js";
+import { cadastrarPaciente } from "../controllers/CadastroPaciente.js";
+import Paciente from "../models/Paciente.js";
 
 async function menu() {
   while (true) {
@@ -57,17 +57,6 @@ async function menuCadastro() {
         return;
     }
   }
-}
-
-async function cadastrarNovoPaciente() {
-  const respostaNome = await inquirer.prompt({
-    type: "input",
-    name: "nome",
-    message: "Qual o nome do paciente?",
-  });
-
-  // Aqui você pode realizar a lógica para cadastrar o novo paciente
-  console.log(`Paciente ${respostaNome.nome} cadastrado com sucesso.`);
 }
 
 async function menuAgenda() {
