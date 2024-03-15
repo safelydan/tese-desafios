@@ -1,17 +1,15 @@
 export default class Agenda {
-    constructor(){
-        this.consultas = [];
+  constructor() {
+    this.consultas = [];
+  }
+
+  agendarConsulta(consulta) {}
+
+  cancelarConsulta(paciente, data, horaInicial) {
+    if (paciente(consultas.length > 0)) {
+      return false && `O paciente tem uma ou mais consultas agendadas`;
     }
+  }
 
-    agendarConsulta(consulta){
-
-    }
-
-    cancelarConsulta(paciente, data, horaInicial) {
-
-    }
-
-    listarAgenda(dataInicial, dataFinal){
-        
-    }
+  listarAgenda(dataInicial, dataFinal) {}
 }
