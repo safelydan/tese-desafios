@@ -1,18 +1,23 @@
 import inquirer from "inquirer";
-import Paciente from "../models/Paciente.js";
 
 export default class CadastroPaciente {
   constructor() {
     this.pacientes = [];
   }
 
-  adicionarPaciente(paciente) {
+  adicionarPaciente(respostas) {
+    const paciente = {
+      nome: respostas.nome,
+      cpf: respostas.cpf,
+      dataNascimento: respostas.dataNascimento,
+    };
+
     if (
       this.validarCPF(paciente.cpf) &&
       this.validarNome(paciente.nome) &&
-      this.validarDataNascimento
+      this.validarDataNascimento(paciente.dataNascimento)
     ) {
-      this.pacientes.push(pacientes);
+      this.pacientes.push(paciente);
       return true;
     } else {
       return false;
@@ -27,6 +32,14 @@ export default class CadastroPaciente {
     } else {
       return false;
     }
+  }
+
+  listarPacientesPorCPF() {
+    return this.pacientes.slice().sort((a, b) => a.cpf.localeCompare(b.cpf));
+  }
+
+  listarPacientesPorNome() {
+    return this.pacientes.slice().sort((a, b) => a.nome.localeCompare(b.nome));
   }
 }
 
@@ -48,12 +61,7 @@ export const perguntas = [
     message: "Qual o CPF do paciente? ",
     validate: function (value) {
       const cpfValido = /^\d{11}$/.test(value);
-
-      if (cpfValido) {
-        return true;
-      } else {
-        return `Erro. Conserte o CPF.`;
-      }
+      return cpfValido ? true : `Erro. Conserte o CPF.`;
     },
   },
   {
@@ -62,12 +70,7 @@ export const perguntas = [
     message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA) ",
     validate: function (value) {
       const dataValida = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(value);
-
-      if (dataValida) {
-        return true;
-      } else {
-        return `Data de nascimento invalidada`;
-      }
+      return dataValida ? true : `Data de nascimento invalidada`;
     },
   },
 ];
@@ -79,9 +82,10 @@ export function formatarCPF(cpf) {
 export async function cadastrarPaciente() {
   try {
     const respostas = await inquirer.prompt(perguntas);
-    console.log(`
-Paciente ${respostas.nome} cadastrado com sucesso.`);
+    console.log(`Paciente ${respostas.nome} cadastrado com sucesso.`);
+    return respostas;
   } catch (error) {
     console.log(`Erro ao cadastrar o paciente. ${error}`);
+    throw error;
   }
 }
