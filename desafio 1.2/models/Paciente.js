@@ -25,11 +25,12 @@ class Paciente {
     return idade >= 18;
   }
 
-  calcularIdade() {
+  validarIdadeMinima(idadeMinima) {
     const dataNascimento = new Date(this.dataNascimento);
     const hoje = new Date();
     const diferencaMilissegundos = hoje.getTime() - dataNascimento.getTime();
-    return Math.floor(diferencaMilissegundos / (1000 * 60 * 60 * 24 * 365.25));
+    const idade = diferencaMilissegundos / (1000 * 60 * 60 * 24 * 365.25);
+    return idade >= idadeMinima;
   }
 }
 

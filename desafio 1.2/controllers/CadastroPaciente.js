@@ -123,7 +123,8 @@ export async function cadastrarNovoPaciente(cadastro) {
   if (
     paciente.validarCPF() &&
     paciente.validarNome() &&
-    paciente.validarDataNascimento()
+    paciente.validarDataNascimento() &&
+    paciente.validarIdadeMinima(18)
   ) {
     return paciente;
   } else {
