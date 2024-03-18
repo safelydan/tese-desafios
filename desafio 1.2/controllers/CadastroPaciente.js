@@ -64,16 +64,38 @@ export async function cadastrarNovoPaciente() {
       type: "input",
       name: "nome",
       message: "Qual o nome do paciente?",
+      validate: function(nome){
+        if(nome.length < 5){
+          console.log(`
+          ${nome} Inválido, nome deve ter cinco caracteres ou mais`);
+          return false;
+        }
+        return true;
+      }
     },
     {
       type: "input",
       name: "cpf",
       message: "Qual o CPF do paciente?",
+      validate: function(cpf){
+        if(!/^\d{11}$/.test(cpf)){
+          console.log("CPF inválido. Por favor, digite no formato: XXX.XXX.XXX-XX");
+          return false;
+        }
+        return true;
+      }
     },
     {
       type: "input",
       name: "dataNascimento",
       message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA)",
+      validate: function(dataNascimento){
+          if(!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)){
+          console.log("Data de nascimento inválida. Por favor, digite no formato: DD/MM/AAAA");
+          return false;
+        }
+        return true
+      }
     },
   ]);
 
