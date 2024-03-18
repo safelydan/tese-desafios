@@ -54,7 +54,7 @@ async function menu() {
         }
         break;
       case "Listar pacientes cadastrados":
-        cadastro.listarPacientesPorCPF();
+        cadastro.listarPacientes();
         break;
       case "Sair":
         console.log("Encerrando o programa...");
