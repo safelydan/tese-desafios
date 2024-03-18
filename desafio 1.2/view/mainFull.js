@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
-import { Paciente, CadastroPaciente } from "./ok.js";
+import CadastroPaciente from "../controllers/CadastroPaciente.js";
+import Paciente from "../models/Paciente.js";
 
 async function cadastrarNovoPaciente() {
   console.log("----- Cadastro de Novo Paciente -----");

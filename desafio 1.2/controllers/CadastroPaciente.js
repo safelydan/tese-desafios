@@ -1,16 +1,10 @@
-// CadastroPaciente.js
-
-// Interface para a classe CadastroPaciente
-// Esta interface descreve as propriedades e métodos esperados em uma classe CadastroPaciente
-// Os métodos aqui listados devem ser implementados pela classe CadastroPaciente
-import Paciente from './Paciente.js';
+import Paciente from "../models/Paciente.js";
 
 class CadastroPaciente {
   constructor() {
-    this.pacientes = [];
+    this.pacientes = []; 
   }
 
-  // Método para adicionar um paciente ao cadastro
   adicionarPaciente(paciente) {
     if (paciente instanceof Paciente) {
       this.pacientes.push(paciente);
@@ -21,7 +15,6 @@ class CadastroPaciente {
     }
   }
 
-  // Método para excluir um paciente do cadastro
   excluirPaciente(cpf) {
     const index = this.pacientes.findIndex((paciente) => paciente.cpf === cpf);
     if (index !== -1) {
@@ -32,15 +25,23 @@ class CadastroPaciente {
     }
   }
 
-  // Método para listar os pacientes cadastrados
   listarPacientes() {
     console.log("Pacientes cadastrados:");
     this.pacientes.forEach((paciente, index) => {
       console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
     });
   }
+
+  listarPacientesPorCPF() {
+
+      const pacientesOrdenados = this.pacientes.slice().sort((a, b) => a.cpf.localeCompare(b.cpf));
+      
+      console.log("Pacientes cadastrados ordenados por CPF:");
+      pacientesOrdenados.forEach((paciente, index) => {
+        console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+      });
+    }
+  
 }
-export {CadastroPaciente}
 
-
-
+export default CadastroPaciente;

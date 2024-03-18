@@ -64,6 +64,18 @@ class Paciente {
         console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
       });
     }
+
+    listarPacientesPorCPF() {
+
+        const pacientesOrdenados = this.pacientes.slice().sort((a, b) => a.cpf.localeCompare(b.cpf));
+        
+        console.log("Pacientes cadastrados ordenados por CPF:");
+        pacientesOrdenados.forEach((paciente, index) => {
+          console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+        });
+      }
+      
+
   }
   
   export { Paciente, CadastroPaciente };
