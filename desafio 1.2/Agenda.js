@@ -4,7 +4,7 @@ export default class Agenda {
     }
 
     agendarConsulta(consulta){
-
+        
     }
 
     cancelarConsulta(paciente, data, horaInicial) {
