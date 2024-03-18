@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
-import { cadastrarPaciente } from "../controllers/CadastroPaciente.js";
+import { cadastrarPaciente, listarPacientesPorNome, listarPacientesPorCPF } from "../controllers/CadastroPaciente.js";
+import CadastroPaciente from "../controllers/CadastroPaciente.js";
 import Paciente from "../models/Paciente.js";
 
 async function menu() {
@@ -26,6 +27,7 @@ async function menu() {
 }
 
 async function menuCadastro() {
+  const cadastro = new CadastroPaciente(); 
   while (true) {
     const resposta = await inquirer.prompt({
       type: "list",
@@ -42,22 +44,26 @@ async function menuCadastro() {
 
     switch (resposta.opcao) {
       case "1-Cadastrar novo paciente":
-        await cadastrarPaciente();
+        await cadastrarPaciente(); // Aqui está a correção
         break;
       case "2-Excluir paciente":
         // Implemente a lógica para excluir um paciente
         break;
       case "3-Listar pacientes (ordenado por CPF)":
-        listarPacientes();
+        console.log("Pacientes cadastrados:");
+        cadastro.pacientes.forEach((paciente, index) => {
+        console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+});
         break;
       case "4-Listar pacientes (ordenado por nome)":
-        // Implemente a lógica para listar pacientes ordenados por nome
-        break;
+        listarPacientesPorNome(cadastro)
+      break;
       case "5-Voltar p/ menu principal":
         return;
     }
   }
 }
+
 
 async function menuAgenda() {
   while (true) {
