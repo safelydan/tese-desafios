@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import CadastroPaciente from "../controllers/CadastroPaciente.js";
+import { cadastrarNovoPaciente } from "../controllers/CadastroPaciente.js";
 import Paciente from "../models/Paciente.js";
 
 const cadastro = new CadastroPaciente();
@@ -26,41 +27,7 @@ async function menuPrincipal() {
   }
 }
 
-async function cadastrarNovoPaciente() {
-  const respostas = await inquirer.prompt([
-    {
-      type: "input",
-      name: "nome",
-      message: "Qual o nome do paciente?",
-    },
-    {
-      type: "input",
-      name: "cpf",
-      message: "Qual o CPF do paciente?",
-    },
-    {
-      type: "input",
-      name: "dataNascimento",
-      message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA)",
-    },
-  ]);
 
-  const { nome, cpf, dataNascimento } = respostas;
-  const paciente = new Paciente(nome, cpf, dataNascimento);
-
-  if (
-    paciente.validarCPF() &&
-    paciente.validarNome() &&
-    paciente.validarDataNascimento()
-  ) {
-    return paciente;
-  } else {
-    console.log(
-      "Os dados do paciente são inválidos. Por favor, tente novamente."
-    );
-    return null;
-  }
-}
 
 async function menuCadastro() {
   while (true) {

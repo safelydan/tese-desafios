@@ -1,4 +1,5 @@
 import Paciente from "../models/Paciente.js";
+import inquirer from "inquirer";
 
 class CadastroPaciente {
   constructor() {
@@ -54,6 +55,42 @@ class CadastroPaciente {
     pacientesOrdenados.forEach((paciente, index) => {
       console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
     });
+  }
+}
+
+export async function cadastrarNovoPaciente() {
+  const respostas = await inquirer.prompt([
+    {
+      type: "input",
+      name: "nome",
+      message: "Qual o nome do paciente?",
+    },
+    {
+      type: "input",
+      name: "cpf",
+      message: "Qual o CPF do paciente?",
+    },
+    {
+      type: "input",
+      name: "dataNascimento",
+      message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA)",
+    },
+  ]);
+
+  const { nome, cpf, dataNascimento } = respostas;
+  const paciente = new Paciente(nome, cpf, dataNascimento);
+
+  if (
+    paciente.validarCPF() &&
+    paciente.validarNome() &&
+    paciente.validarDataNascimento()
+  ) {
+    return paciente;
+  } else {
+    console.log(
+      "Os dados do paciente são inválidos. Por favor, tente novamente."
+    );
+    return null;
   }
 }
 
