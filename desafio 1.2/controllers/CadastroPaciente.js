@@ -32,6 +32,29 @@ class CadastroPaciente {
     });
   }
 
+
+  listarPacientesPorCPF() {
+    const pacientesOrdenados = this.pacientes.slice().sort((a, b) => {
+      const cpfA = parseInt(a.cpf.replace(/\D/g, ''));
+      const cpfB = parseInt(b.cpf.replace(/\D/g, ''));
+      return cpfA - cpfB;
+    });
+    console.log("Pacientes cadastrados (ordenados por CPF):");
+    pacientesOrdenados.forEach((paciente, index) => {
+      console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+    });
+  }
+  
+
+  listarPacientesPorNome() {
+    const pacientesOrdenados = this.pacientes.slice().sort((a, b) => {
+      return a.nome.localeCompare(b.nome);
+    });
+    console.log("Pacientes cadastrados (ordenados por Nome):");
+    pacientesOrdenados.forEach((paciente, index) => {
+      console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+    });
+  }
 }
 
 export default CadastroPaciente;
