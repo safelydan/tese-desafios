@@ -124,12 +124,14 @@ export async function cadastrarNovoPaciente(cadastro) {
     paciente.validarCPF() &&
     paciente.validarNome() &&
     paciente.validarDataNascimento() &&
-    paciente.validarIdadeMinima(18)
+    paciente.validarIdadeMinima(13)
   ) {
     return paciente;
-  } else {
+  }
+   else {
     console.log(
-      `Os dados do paciente são inválidos. Por favor, tente novamente.`
+      `Erro: paciente deve ter pelo menos 13 anos.
+      `
     );
     return null;
   }
