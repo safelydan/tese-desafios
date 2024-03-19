@@ -1,25 +1,17 @@
+import Paciente from "../models/Paciente.js";
 import inquirer from "inquirer";
 
-export default class CadastroPaciente {
+class CadastroPaciente {
   constructor() {
-    this.pacientes = [];
+    this.pacientes = []; 
   }
 
-  adicionarPaciente(respostas) {
-    const paciente = {
-      nome: respostas.nome,
-      cpf: respostas.cpf,
-      dataNascimento: respostas.dataNascimento,
-    };
-
-    if (
-      this.validarCPF(paciente.cpf) &&
-      this.validarNome(paciente.nome) &&
-      this.validarDataNascimento(paciente.dataNascimento)
-    ) {
+  adicionarPaciente(paciente) {
+    if (paciente instanceof Paciente) {
       this.pacientes.push(paciente);
       return true;
     } else {
+      console.log("O objeto passado não é uma instância de Paciente.");
       return false;
     }
   }
@@ -34,58 +26,72 @@ export default class CadastroPaciente {
     }
   }
 
-  listarPacientesPorCPF() {
-    return this.pacientes.slice().sort((a, b) => a.cpf.localeCompare(b.cpf));
+  listarPacientes() {
+    console.log("Pacientes cadastrados:");
+    this.pacientes.forEach((paciente, index) => {
+      console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+    });
   }
+
+
+  listarPacientesPorCPF() {
+    const pacientesOrdenados = this.pacientes.slice().sort((a, b) => {
+      const cpfA = parseInt(a.cpf.replace(/\D/g, ''));
+      const cpfB = parseInt(b.cpf.replace(/\D/g, ''));
+      return cpfA - cpfB;
+    });
+    console.log("Pacientes cadastrados (ordenados por CPF):");
+    pacientesOrdenados.forEach((paciente, index) => {
+      console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+    });
+  }
+  
 
   listarPacientesPorNome() {
-    return this.pacientes.slice().sort((a, b) => a.nome.localeCompare(b.nome));
+    const pacientesOrdenados = this.pacientes.slice().sort((a, b) => {
+      return a.nome.localeCompare(b.nome);
+    });
+    console.log("Pacientes cadastrados (ordenados por Nome):");
+    pacientesOrdenados.forEach((paciente, index) => {
+      console.log(`${index + 1}. Nome: ${paciente.nome}, CPF: ${paciente.cpf}, Data de Nascimento: ${paciente.dataNascimento}`);
+    });
   }
 }
 
-export const perguntas = [
-  {
-    type: "input",
-    name: "nome",
-    message: "Qual o nome do paciente? ",
-    validate: function (value) {
-      if (value.length < 5) {
-        return "O nome do paciente deve ter pelo menos 5 caracteres.";
-      }
-      return true;
+export async function cadastrarNovoPaciente() {
+  const respostas = await inquirer.prompt([
+    {
+      type: "input",
+      name: "nome",
+      message: "Qual o nome do paciente?",
     },
-  },
-  {
-    type: "input",
-    name: "cpf",
-    message: "Qual o CPF do paciente? ",
-    validate: function (value) {
-      const cpfValido = /^\d{11}$/.test(value);
-      return cpfValido ? true : `Erro. Conserte o CPF.`;
+    {
+      type: "input",
+      name: "cpf",
+      message: "Qual o CPF do paciente?",
     },
-  },
-  {
-    type: "input",
-    name: "dataNascimento",
-    message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA) ",
-    validate: function (value) {
-      const dataValida = /^(\d{2})\/(\d{2})\/(\d{4})$/.test(value);
-      return dataValida ? true : `Data de nascimento invalidada`;
+    {
+      type: "input",
+      name: "dataNascimento",
+      message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA)",
     },
-  },
-];
+  ]);
 
-export function formatarCPF(cpf) {
-  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-}
+  const { nome, cpf, dataNascimento } = respostas;
+  const paciente = new Paciente(nome, cpf, dataNascimento);
 
-export async function cadastrarPaciente() {
-  try {
-    const respostas = await inquirer.prompt(perguntas);
-    console.log(`Paciente ${respostas.nome} cadastrado com sucesso.`);
-    return respostas;
-  } catch (error) {
-    console.log(`Erro ao cadastrar o paciente. ${error}`);
-    throw error;
+  if (
+    paciente.validarCPF() &&
+    paciente.validarNome() &&
+    paciente.validarDataNascimento()
+  ) {
+    return paciente;
+  } else {
+    console.log(
+      "Os dados do paciente são inválidos. Por favor, tente novamente."
+    );
+    return null;
   }
 }
+
+export default CadastroPaciente;

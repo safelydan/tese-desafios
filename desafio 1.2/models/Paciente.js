@@ -1,4 +1,4 @@
-export default class Paciente {
+class Paciente {
   constructor(nome, cpf, dataNascimento) {
     this.nome = nome;
     this.cpf = cpf;
@@ -32,3 +32,5 @@ export default class Paciente {
     return Math.floor(diferencaMilissegundos / (1000 * 60 * 60 * 24 * 365.25));
   }
 }
+
+export default Paciente;
