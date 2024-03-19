@@ -46,12 +46,18 @@ async function menuCadastro() {
 
     switch (resposta.opcao) {
       case "1-Cadastrar novo paciente": 
-        const novoPaciente = await cadastrarNovoPaciente();
-        if (novoPaciente) {
-          cadastro.adicionarPaciente(novoPaciente);
-          console.log(`Paciente ${novoPaciente.nome} cadastrado com sucesso!`);
+      const novoPaciente = await cadastrarNovoPaciente(cadastro);
+      if (novoPaciente !== null) {
+        const pacienteAdicionado = cadastro.adicionarPaciente(novoPaciente);
+        if (pacienteAdicionado) {
+          console.log(`
+          Paciente cadastrado com sucesso!`);
+        } else {
+          console.log(`
+          Falha ao cadastrar o paciente.`);
         }
-        break;
+      }
+      break;
 
       case "3-Listar pacientes (ordenado por CPF)":
         cadastro.listarPacientesPorCPF();

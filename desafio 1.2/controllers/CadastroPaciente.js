@@ -7,13 +7,21 @@ class CadastroPaciente {
   }
 
   adicionarPaciente(paciente) {
-    if (paciente instanceof Paciente) {
-      this.pacientes.push(paciente);
-      return true;
-    } else {
+    if (!(paciente instanceof Paciente)) {
       console.log("O objeto passado não é uma instância de Paciente.");
       return false;
     }
+
+    if (this.verificarExistenciaCPF(paciente.cpf)) {
+      return false;
+    }
+
+    this.pacientes.push(paciente);
+    return true;
+  }
+
+  verificarExistenciaCPF(cpf) {
+    return this.pacientes.some(paciente => paciente.cpf === cpf);
   }
 
   excluirPaciente(cpf) {
@@ -58,22 +66,54 @@ class CadastroPaciente {
   }
 }
 
-export async function cadastrarNovoPaciente() {
+export async function cadastrarNovoPaciente(cadastro) {
+
   const respostas = await inquirer.prompt([
     {
       type: "input",
       name: "nome",
       message: "Qual o nome do paciente?",
+      validate: function(nome){
+        if(nome.length < 5){
+          console.log(`
+          ${nome} Inválido, nome deve ter cinco caracteres ou mais`);
+          return false;
+        }
+        return true;
+      }
     },
     {
       type: "input",
       name: "cpf",
       message: "Qual o CPF do paciente?",
+      validate: function(cpf){
+        if(!/^\d{11}$/.test(cpf)){
+          console.log(`
+          CPF inválido. Por favor digite corretamente`);
+          return false;
+        }
+
+        if (cadastro.verificarExistenciaCPF(cpf)) {
+          console.log(`
+          Erro: CPF já cadastrado`);
+          return false;
+        }
+
+        return true;
+      }
     },
     {
       type: "input",
       name: "dataNascimento",
       message: "Qual a data de nascimento do paciente? (Formato: DD/MM/AAAA)",
+      validate: function(dataNascimento){
+          if(!/^\d{2}\/\d{2}\/\d{4}$/.test(dataNascimento)){
+          console.log(`
+          Data de nascimento inválida. Por favor, digite no formato: DD/MM/AAAA`);
+          return false;
+        }
+        return true
+      }
     },
   ]);
 
@@ -83,12 +123,13 @@ export async function cadastrarNovoPaciente() {
   if (
     paciente.validarCPF() &&
     paciente.validarNome() &&
-    paciente.validarDataNascimento()
+    paciente.validarDataNascimento() &&
+    paciente.validarIdadeMinima(18)
   ) {
     return paciente;
   } else {
     console.log(
-      "Os dados do paciente são inválidos. Por favor, tente novamente."
+      `Os dados do paciente são inválidos. Por favor, tente novamente.`
     );
     return null;
   }
