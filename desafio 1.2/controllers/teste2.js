@@ -197,12 +197,53 @@ class ConsultaController {
     }
 
     validarHorarioFuncionamento(data, horaInicial, horaFinal) {
-        const horarioAbertura = new Date(`${data} 08:00:00`);
-        const horarioFechamento = new Date(`${data} 19:00:00`);
-        const consultaStartTime = new Date(`${data} ${horaInicial.slice(0, 2)}:${horaInicial.slice(2)}:00`);
-        const consultaEndTime = new Date(`${data} ${horaFinal.slice(0, 2)}:${horaFinal.slice(2)}:00`);
-        return consultaStartTime >= horarioAbertura && consultaEndTime <= horarioFechamento;
+        // Verificar se os horários de abertura e fechamento estão no formato correto
+        if (!this.validarFormatoData(data)) {
+            console.log("Erro: Formato de data inválido. Use DD/MM/AAAA.");
+            return false;
+        }
+    
+        // Verificar se os horários de abertura e fechamento estão no formato correto
+        if (!this.validarFormatoHora(horaInicial) || !this.validarFormatoHora(horaFinal)) {
+            console.log("Erro: Formato de hora inválido. Use HHMM.");
+            return false;
+        }
+    
+        console.log("Data:", data); // Verificar o formato da data aqui
+    
+        // Dividir a data em dia, mês e ano
+        const [dia, mes, ano] = data.split('/');
+        
+        // Criar objetos Date para a data, hora de abertura e hora de fechamento
+        const dataFormatada = new Date(`${ano}-${mes}-${dia}`);
+        const horarioAbertura = new Date(dataFormatada);
+        horarioAbertura.setHours(8, 0, 0); // Define a hora de abertura para 08:00:00
+        const horarioFechamento = new Date(dataFormatada);
+        horarioFechamento.setHours(19, 0, 0); // Define a hora de fechamento para 19:00:00
+        const consultaStartTime = new Date(dataFormatada);
+        consultaStartTime.setHours(parseInt(horaInicial.slice(0, 2)), parseInt(horaInicial.slice(2)), 0);
+        const consultaEndTime = new Date(dataFormatada);
+        consultaEndTime.setHours(parseInt(horaFinal.slice(0, 2)), parseInt(horaFinal.slice(2)), 0);
+        
+        console.log("Horário de abertura:", horarioAbertura);
+        console.log("Horário de fechamento:", horarioFechamento);
+        console.log("Hora de início da consulta:", consultaStartTime);
+        console.log("Hora de fim da consulta:", consultaEndTime);
+        
+        const dentroDoHorario = consultaStartTime >= horarioAbertura && consultaEndTime <= horarioFechamento;
+        
+        if (dentroDoHorario) {
+            console.log("A consulta está dentro do horário de funcionamento.");
+        } else {
+            console.log("A consulta está fora do horário de funcionamento.");
+        }
+        
+        return dentroDoHorario;
     }
+    
+    
+    
+    
         async cancelarConsultaInterativa() {
             const dadosCancelamento = await this.obterDadosCancelamento();
     
