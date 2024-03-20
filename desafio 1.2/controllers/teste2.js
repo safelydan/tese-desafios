@@ -111,20 +111,18 @@ class ConsultaController {
     
     validarDataFutura(data) {
         const currentDate = new Date();
-        console.log("Data atual:", currentDate);
+
     
         // Dividir a string da data em dia, mês e ano
         const [dia, mes, ano] = data.split('/');
     
         // Criar uma nova string no formato AAAA-MM-DD
         const dataFormatada = `${ano}-${mes}-${dia}`;
-        console.log("Data formatada:", dataFormatada);
+
     
         // Criar o objeto Date com a data formatada
         const consultaDate = new Date(dataFormatada);
-        console.log("Data da consulta:", consultaDate);
-    
-        console.log("Diferença:", consultaDate.getTime() - currentDate.getTime());
+
         return consultaDate.getTime() > currentDate.getTime();
     }
     
@@ -132,17 +130,16 @@ class ConsultaController {
 
     validarHoraInicialAtual(data, horaInicial) {
         const currentDate = new Date();
-        console.log("Data atual:", currentDate);
+
         
         const [dia, mes, ano] = data.split('/');
         const dataFormatada = `${ano}-${mes}-${dia}`;
-        console.log("Data formatada:", dataFormatada);
+
         
         const consultaDate = new Date(dataFormatada);
-        console.log("Data da consulta:", consultaDate);
+
         
         const consultaStartTime = new Date(`${dataFormatada}T${horaInicial.slice(0, 2)}:${horaInicial.slice(2)}:00`);
-        console.log("Hora de início da consulta:", consultaStartTime);
         
         if (isNaN(consultaDate.getTime())) {
             console.log("Data da consulta inválida.");
@@ -224,11 +221,6 @@ class ConsultaController {
         consultaStartTime.setHours(parseInt(horaInicial.slice(0, 2)), parseInt(horaInicial.slice(2)), 0);
         const consultaEndTime = new Date(dataFormatada);
         consultaEndTime.setHours(parseInt(horaFinal.slice(0, 2)), parseInt(horaFinal.slice(2)), 0);
-        
-        console.log("Horário de abertura:", horarioAbertura);
-        console.log("Horário de fechamento:", horarioFechamento);
-        console.log("Hora de início da consulta:", consultaStartTime);
-        console.log("Hora de fim da consulta:", consultaEndTime);
         
         const dentroDoHorario = consultaStartTime >= horarioAbertura && consultaEndTime <= horarioFechamento;
         
