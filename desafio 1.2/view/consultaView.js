@@ -1,5 +1,5 @@
 import Paciente from "../models/Paciente.js";
-import Consulta from "../models/Consulta.js";
+import { cadastrarNovoPaciente } from "../controllers/CadastroPaciente.js"; // Importe a função corretamente
 
 class Agenda {
     constructor(consultaController) {
@@ -8,10 +8,10 @@ class Agenda {
 
     agendarConsultaComNovoPaciente(nome, cpf, idade, data, horaInicial, horaFinal) {
         const paciente = new Paciente(nome, cpf, idade);
-        this.consultaController.adicionarPaciente(paciente);
+        cadastrarNovoPaciente(paciente); // Use a função diretamente
         this.consultaController.agendarConsulta(paciente.cpf, data, horaInicial, horaFinal);
     }
-
+    
     cancelarConsulta(pacienteCPF, data, horaInicial) {
         this.consultaController.cancelarConsulta(pacienteCPF, data, horaInicial);
     }
@@ -28,7 +28,5 @@ class Agenda {
         });
     }
 }
-
-
 
 export default Agenda;
