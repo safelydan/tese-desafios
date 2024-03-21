@@ -1,14 +1,13 @@
 import inquirer from "inquirer";
 import CadastroPaciente from "../controllers/CadastroPaciente.js";
-import { cadastrarNovoPaciente } from "../controllers/CadastroPaciente.js";
+import {
+  cadastrarNovoPaciente,
+  excluirPacienteExistente,
+} from "../controllers/CadastroPaciente.js";
 import ConsultaController from "../controllers/ConsultaController.js";
-
-import Paciente from "../models/Paciente.js";
-
 
 const cadastro = new CadastroPaciente();
 const consultaController = new ConsultaController();
-
 
 async function menuPrincipal() {
   while (true) {
@@ -33,8 +32,6 @@ async function menuPrincipal() {
   }
 }
 
-
-
 async function menuCadastro() {
   while (true) {
     const resposta = await inquirer.prompt({
@@ -51,19 +48,23 @@ async function menuCadastro() {
     });
 
     switch (resposta.opcao) {
-      case "1-Cadastrar novo paciente": 
-      const novoPaciente = await cadastrarNovoPaciente(cadastro);
-      if (novoPaciente !== null) {
-        const pacienteAdicionado = cadastro.adicionarPaciente(novoPaciente);
-        if (pacienteAdicionado) {
-          console.log(`
+      case "1-Cadastrar novo paciente":
+        const novoPaciente = await cadastrarNovoPaciente(cadastro);
+        if (novoPaciente !== null) {
+          const pacienteAdicionado = cadastro.adicionarPaciente(novoPaciente);
+          if (pacienteAdicionado) {
+            console.log(`
           Paciente cadastrado com sucesso!`);
-        } else {
-          console.log(`
+          } else {
+            console.log(`
           Falha ao cadastrar o paciente.`);
+          }
         }
-      }
-      break;
+        break;
+
+      case "2-Excluir paciente":
+        await excluirPacienteExistente(cadastro);
+        break;
 
       case "3-Listar pacientes (ordenado por CPF)":
         cadastro.listarPacientesPorCPF();
@@ -71,7 +72,7 @@ async function menuCadastro() {
       case "4-Listar pacientes (ordenado por Nome)":
         cadastro.listarPacientesPorNome();
         break;
-      case "5-Voltar p/ menu principal": 
+      case "5-Voltar p/ menu principal":
         return;
     }
   }
@@ -79,33 +80,32 @@ async function menuCadastro() {
 
 async function menuConsulta() {
   while (true) {
-      const resposta = await inquirer.prompt({
-          type: 'list',
-          name: 'opcao',
-          message: 'Escolha uma opção:',
-          choices: [
-              '1-Agendar consulta',
-              '2-Cancelar agendamento',
-              '3-Listar agenda',
-              '4-Voltar p/ menu principal',
-          ],
-      });
+    const resposta = await inquirer.prompt({
+      type: "list",
+      name: "opcao",
+      message: "Escolha uma opção:",
+      choices: [
+        "1-Agendar consulta",
+        "2-Cancelar agendamento",
+        "3-Listar agenda",
+        "4-Voltar p/ menu principal",
+      ],
+    });
 
-      switch (resposta.opcao) {
-          case '1-Agendar consulta':
-              await consultaController.agendarConsultaInterativa();
-              break;
-          case '2-Cancelar agendamento':
-              await consultaController.cancelarConsultaInterativa();
-              break;
-          case '3-Listar agenda':
-              consultaController.listarConsultas();
-              break;
-          case '4-Voltar p/ menu principal':
-              return;
-      }
+    switch (resposta.opcao) {
+      case "1-Agendar consulta":
+        await consultaController.agendarConsultaInterativa();
+        break;
+      case "2-Cancelar agendamento":
+        await consultaController.cancelarConsultaInterativa();
+        break;
+      case "3-Listar agenda":
+        consultaController.listarConsultas();
+        break;
+      case "4-Voltar p/ menu principal":
+        return;
+    }
   }
 }
-
 
 menuPrincipal();

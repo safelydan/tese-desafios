@@ -137,4 +137,19 @@ export async function cadastrarNovoPaciente(cadastro) {
   }
 }
 
+export async function excluirPacienteExistente(cadastro) {
+  const resposta = await inquirer.prompt({
+    type: 'input',
+    name: 'cpf',
+    message: 'Digite o CPF do paciente que deseja excluir:',
+  });
+
+  const { cpf } = resposta;
+  if (cadastro.excluirPaciente(cpf)) {
+    console.log('Paciente excluído com sucesso.');
+  } else {
+    console.log('Erro: Paciente não encontrado.');
+  }
+}
+
 export default CadastroPaciente;
