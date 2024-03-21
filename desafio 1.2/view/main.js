@@ -1,11 +1,14 @@
 import inquirer from "inquirer";
 import CadastroPaciente from "../controllers/CadastroPaciente.js";
 import { cadastrarNovoPaciente } from "../controllers/CadastroPaciente.js";
-import Agenda from "../controllers/ConsultaView.js"
+import ConsultaController from "../controllers/ConsultaController.js";
+
 import Paciente from "../models/Paciente.js";
 
+
 const cadastro = new CadastroPaciente();
-const agenda = new Agenda();
+const consultaController = new ConsultaController();
+
 
 async function menuPrincipal() {
   while (true) {
@@ -17,12 +20,13 @@ async function menuPrincipal() {
     });
 
     switch (resposta.opcao) {
-      case "1-Cadastro de pacientes":      await menuCadastro(); 
+      case "1-Cadastro de pacientes":
+        await menuCadastro();
         break;
       case "2-Agenda":
-        agenda.iniciar();
+        await menuConsulta();
         break;
-      case "3-Fim": 
+      case "3-Fim":
         console.log("Encerrando o programa...");
         return;
     }
@@ -73,39 +77,35 @@ async function menuCadastro() {
   }
 }
 
-async function menuAgenda() {
+async function menuConsulta() {
   while (true) {
-    console.log("\n=== Menu ===");
+      const resposta = await inquirer.prompt({
+          type: 'list',
+          name: 'opcao',
+          message: 'Escolha uma opção:',
+          choices: [
+              '1-Agendar consulta',
+              '2-Cancelar agendamento',
+              '3-Listar agenda',
+              '4-Voltar p/ menu principal',
+          ],
+      });
 
-    const { opcao } = await inquirer.prompt({
-      type: 'list',
-      name: 'opcao',
-      message: 'Escolha uma opção:',
-      choices: [
-        { name: 'Agendar consulta', value: '1' },
-        { name: 'Cancelar consulta', value: '2' },
-        { name: 'Listar agenda', value: '3' }, // Nova opção para listar consultas
-        { name: 'Voltar p/ menu principal', value: '4' }
-      ]
-    });
-
-    switch (opcao) {
-      case '1':
-        await this.consultaController.agendarConsultaInterativa();
-        break;
-      case '2':
-        await this.consultaController.cancelarConsultaInterativa();
-        break;
-      case '3':
-        this.consultaController.listarConsultas(); // Chamada para o método listarConsultas
-        break;
-      case '4':
-        console.log("Saindo...");
-        return;
-      default:
-        console.log("Opção inválida.");
-    }
+      switch (resposta.opcao) {
+          case '1-Agendar consulta':
+              await consultaController.agendarConsultaInterativa();
+              break;
+          case '2-Cancelar agendamento':
+              await consultaController.cancelarConsultaInterativa();
+              break;
+          case '3-Listar agenda':
+              consultaController.listarConsultas();
+              break;
+          case '4-Voltar p/ menu principal':
+              return;
+      }
   }
 }
+
 
 menuPrincipal();
