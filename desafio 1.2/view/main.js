@@ -20,7 +20,7 @@ async function menuPrincipal() {
       case "1-Cadastro de pacientes":      await menuCadastro(); 
         break;
       case "2-Agenda":
-        agenda.iniciar();
+        await menuAgenda();
         break;
       case "3-Fim": 
         console.log("Encerrando o programa...");
@@ -91,13 +91,13 @@ async function menuAgenda() {
 
     switch (opcao) {
       case '1':
-        await this.consultaController.agendarConsultaInterativa();
+        await agenda.agendarConsultaInterativa(); // Chamando o método diretamente de 'agenda'
         break;
       case '2':
-        await this.consultaController.cancelarConsultaInterativa();
+        await agenda.cancelarConsultaInterativa(); // Chamando o método diretamente de 'agenda'
         break;
       case '3':
-        this.consultaController.listarConsultas(); // Chamada para o método listarConsultas
+        agenda.listarConsultas(); // Chamando o método diretamente de 'agenda'
         break;
       case '4':
         console.log("Saindo...");
@@ -107,5 +107,6 @@ async function menuAgenda() {
     }
   }
 }
+
 
 menuPrincipal();

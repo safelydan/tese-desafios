@@ -17,7 +17,7 @@ class Agenda {
                 choices: [
                     { name: 'Agendar consulta', value: '1' },
                     { name: 'Cancelar consulta', value: '2' },
-                    { name: 'Listar agenda', value: '3' }, // Nova opção para listar consultas
+                    { name: 'Listar agenda', value: '3' }, 
                     { name: 'Voltar p/ menu principal', value: '4' }
                 ]
             });
@@ -30,7 +30,7 @@ class Agenda {
                     await this.consultaController.cancelarConsultaInterativa();
                     break;
                 case '3':
-                    this.consultaController.listarConsultas(); // Chamada para o método listarConsultas
+                    this.consultaController.listarConsultas(); 
                     break;
                 case '4':
                     console.log("Saindo...");
