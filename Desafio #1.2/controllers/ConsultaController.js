@@ -1,95 +1,110 @@
 import inquirer from 'inquirer';
 import Consulta from '../models/Consulta.js';
+import Paciente from '../models/Paciente.js';
 
 class ConsultaController {
     constructor() {
         this.consultas = [];
-        this.pacientes = []
+        this.pacientes = [];
     }
 
     async agendarConsultaInterativa() {
+        const paciente = await this.obterPaciente(); // Obtenha os dados do paciente
+
+        if (!paciente) {
+            console.log("Erro: Paciente não encontrado.");
+            return;
+        }
+
         const dadosConsulta = await this.obterDadosConsulta();
-        const consulta = new Consulta(dadosConsulta.paciente, dadosConsulta.data, dadosConsulta.horaInicial, dadosConsulta.horaFinal);
+        const consulta = new Consulta(paciente.cpf, dadosConsulta.data, dadosConsulta.horaInicial, dadosConsulta.horaFinal);
 
-        if (!this.validarFormatoCPF(dadosConsulta.paciente)) {
-            console.log("Erro: Formato de CPF inválido.");
-            return;
-        }
-
-        if (!this.validarFormatoData(dadosConsulta.data)) {
-            console.log("Erro: Formato de data inválido. Use DD/MM/AAAA.");
-            return;
-        }
-
-        if (!this.validarFormatoHora(dadosConsulta.horaInicial) || !this.validarFormatoHora(dadosConsulta.horaFinal)) {
-            console.log("Erro: Formato de hora inválido. Use HHMM.");
-            return;
-        }
-
-        if (!this.validarDataFutura(dadosConsulta.data)) {
-            return;
-        }
-
-        if (!this.validarHoraInicialAtual(dadosConsulta.data, dadosConsulta.horaInicial)) {
-            console.log("Erro: A hora inicial da consulta deve ser maior que a hora atual.");
-            return;
-        }
-
-        if (!this.validarHoraFinalMaior(dadosConsulta.horaInicial, dadosConsulta.horaFinal)) {
-            console.log("Erro: A hora final deve ser maior que a hora inicial.");
-            return;
-        }
-
-        if (this.pacientePossuiConsultaFutura(dadosConsulta.paciente)) {
-            console.log("Erro: O paciente já possui uma consulta futura agendada.");
-            return;
-        }
-
-        if (this.existeConsultaSobreposta(consulta)) {
-            console.log("Erro: Já existe uma consulta agendada para este período.");
-            return;
-        }
-
-        if (!this.validarIntervalo15Minutos(dadosConsulta.horaInicial, dadosConsulta.horaFinal)) {
-            console.log("Erro: As horas devem ser em intervalos de 15 minutos.");
-            return;
-        }
-
-        if (!this.validarHorarioFuncionamento(dadosConsulta.data, dadosConsulta.horaInicial, dadosConsulta.horaFinal)) {
-            console.log("Erro: A consulta deve estar dentro do horário de funcionamento (08:00h - 19:00h).");
+        if (!this.validarConsulta(consulta)) {
             return;
         }
 
         this.consultas.push(consulta);
-        console.log("Consulta agendada com sucesso.");
+        console.log("Consulta agendada com sucesso para o paciente:", paciente.nome);
     }
+    
+    async obterPaciente() {
+        const respostas = await inquirer.prompt([
+            { type: 'input', name: 'cpf', message: 'Digite o CPF do paciente:' }
+        ]);
+    
+        const pacienteExistente = this.pacientes.find(p => p.cpf === respostas.cpf);
+    
+        if (pacienteExistente) {
+            return pacienteExistente; // Retorna o paciente existente se encontrado
+        } else {
+            // Se o paciente não existe, crie um novo paciente e adicione à lista de pacientes
+            const paciente = new Paciente(respostas.nome, respostas.cpf);
+            this.pacientes.push(paciente);
+            return paciente;
+        }
+    }
+    
+
+    
 
     async obterDadosConsulta() {
         const perguntas = [
-            {
-                type: 'input',
-                name: 'paciente',
-                message: 'CPF do paciente:'
-            },
-            {
-                type: 'input',
-                name: 'data',
-                message: 'Data da consulta (DD/MM/AAAA):'
-            },
-            {
-                type: 'input',
-                name: 'horaInicial',
-                message: 'Hora inicial da consulta (HHMM):'
-            },
-            {
-                type: 'input',
-                name: 'horaFinal',
-                message: 'Hora final da consulta (HHMM):'
-            }
+            { type: 'input', name: 'data', message: 'Data da consulta (DD/MM/AAAA):' },
+            { type: 'input', name: 'horaInicial', message: 'Hora inicial da consulta (HHMM):' },
+            { type: 'input', name: 'horaFinal', message: 'Hora final da consulta (HHMM):' }
         ];
+        return await inquirer.prompt(perguntas);
+    }
 
-        const respostas = await inquirer.prompt(perguntas);
-        return respostas;
+    validarConsulta(consulta) {
+        const { cpf, data, horaInicial, horaFinal } = consulta;
+
+
+        if (!this.validarFormatoData(data)) {
+            console.log("Erro: Formato de data inválido. Use DD/MM/AAAA.");
+            return false;
+        }
+
+        if (!this.validarFormatoHora(horaInicial) || !this.validarFormatoHora(horaFinal)) {
+            console.log("Erro: Formato de hora inválido. Use HHMM.");
+            return false;
+        }
+
+        if (!this.validarDataFutura(data)) {
+            return false;
+        }
+
+        if (!this.validarHoraInicialAtual(data, horaInicial)) {
+            console.log("Erro: A hora inicial da consulta deve ser maior que a hora atual.");
+            return false;
+        }
+
+        if (!this.validarHoraFinalMaior(horaInicial, horaFinal)) {
+            console.log("Erro: A hora final deve ser maior que a hora inicial.");
+            return false;
+        }
+
+        if (this.pacientePossuiConsultaFutura(cpf)) {
+            console.log("Erro: O paciente já possui uma consulta futura agendada.");
+            return false;
+        }
+
+        if (this.existeConsultaSobreposta(consulta)) {
+            console.log("Erro: Já existe uma consulta agendada para este período.");
+            return false;
+        }
+
+        if (!this.validarIntervalo15Minutos(horaInicial, horaFinal)) {
+            console.log("Erro: As horas devem ser em intervalos de 15 minutos.");
+            return false;
+        }
+
+        if (!this.validarHorarioFuncionamento(data, horaInicial, horaFinal)) {
+            console.log("Erro: A consulta deve estar dentro do horário de funcionamento (08:00h - 19:00h).");
+            return false;
+        }
+
+        return true;
     }
 
     validarFormatoCPF(cpf) {
@@ -117,39 +132,20 @@ class ConsultaController {
         return consultaDate.getTime() > currentDate.getTime();
     }
 
-
-
     validarHoraInicialAtual(data, horaInicial) {
         const currentDate = new Date();
-
 
         const [dia, mes, ano] = data.split('/');
         const dataFormatada = `${ano}-${mes}-${dia}`;
 
-
         const consultaDate = new Date(dataFormatada);
-
-
         const consultaStartTime = new Date(`${dataFormatada}T${horaInicial.slice(0, 2)}:${horaInicial.slice(2)}:00`);
-
-        if (isNaN(consultaDate.getTime())) {
-            console.log("Data da consulta inválida.");
-            return false;
-        }
 
         if (consultaDate.getTime() > currentDate.getTime()) {
             return true;
         } else if (consultaDate.getTime() === currentDate.getTime()) {
-            console.log("A data da consulta é igual à data atual.");
-            if (consultaStartTime.getTime() > currentDate.getTime()) {
-                console.log("A hora de início da consulta está no futuro.");
-                return true;
-            } else {
-                console.log("A hora de início da consulta está no passado.");
-                return false;
-            }
+            return consultaStartTime.getTime() > currentDate.getTime();
         } else {
-            console.log("A data da consulta está no passado.");
             return false;
         }
     }
@@ -158,9 +154,8 @@ class ConsultaController {
         return parseInt(horaFinal) > parseInt(horaInicial);
     }
 
-
-    pacientePossuiConsultaFutura(paciente) {
-        const pacienteConsulta = this.consultas.find(consulta => consulta.paciente === paciente);
+    pacientePossuiConsultaFutura(cpf) {
+        const pacienteConsulta = this.consultas.find(consulta => consulta.paciente === cpf);
         if (!pacienteConsulta) return false;
         const consultaDate = new Date(pacienteConsulta.data);
         const currentDate = new Date();
@@ -184,21 +179,9 @@ class ConsultaController {
     }
 
     validarHorarioFuncionamento(data, horaInicial, horaFinal) {
-
-        if (!this.validarFormatoData(data)) {
-            console.log("Erro: Formato de data inválido. Use DD/MM/AAAA.");
-            return false;
-        }
-
-        if (!this.validarFormatoHora(horaInicial) || !this.validarFormatoHora(horaFinal)) {
-            console.log("Erro: Formato de hora inválido. Use HHMM.");
-            return false;
-        }
-
-
         const [dia, mes, ano] = data.split('/');
-
         const dataFormatada = new Date(`${ano}-${mes}-${dia}`);
+
         const horarioAbertura = new Date(dataFormatada);
         horarioAbertura.setHours(8, 0, 0);
         const horarioFechamento = new Date(dataFormatada);
@@ -219,11 +202,8 @@ class ConsultaController {
         return dentroDoHorario;
     }
 
-    
-
     async cancelarConsultaInterativa() {
         const dadosCancelamento = await this.obterDadosCancelamento();
-
 
         const consultaIndex = this.consultas.findIndex(consulta => {
             return consulta.paciente === dadosCancelamento.paciente &&
@@ -235,7 +215,6 @@ class ConsultaController {
             console.log("Erro: Consulta não encontrada para cancelamento.");
             return;
         }
-
 
         const consulta = this.consultas[consultaIndex];
         const consultaDate = new Date(`${consulta.data} ${consulta.horaInicial.slice(0, 2)}:${consulta.horaInicial.slice(2)}:00`);
@@ -251,26 +230,11 @@ class ConsultaController {
 
     async obterDadosCancelamento() {
         const perguntas = [
-            {
-                type: 'input',
-                name: 'paciente',
-                message: 'CPF do paciente:'
-            },
-            {
-                type: 'input',
-                name: 'data',
-                message: 'Data da consulta (DD/MM/AAAA):'
-            },
-            {
-                type: 'input',
-                name: 'horaInicial',
-                message: 'Hora inicial da consulta (HHMM):'
-            }
+            { type: 'input', name: 'paciente', message: 'CPF do paciente:' },
+            { type: 'input', name: 'data', message: 'Data da consulta (DD/MM/AAAA):' },
+            { type: 'input', name: 'horaInicial', message: 'Hora inicial da consulta (HHMM):' }
         ];
-
-        const respostas = await inquirer.prompt(perguntas);
-        return respostas;
-
+        return await inquirer.prompt(perguntas);
     }
 
     listarConsultas() {
@@ -279,20 +243,14 @@ class ConsultaController {
         } else {
             console.log("Consultas agendadas:");
             this.consultas.forEach((consulta, index) => {
+                const paciente = this.pacientes.find(p => p.cpf === consulta.paciente);
                 console.log(`Consulta ${index + 1}:`);
-                const horaInicialFormatada = `${consulta.horaInicial.slice(0,2)}:${consulta.horaInicial.slice(2)}`
-                const horaFinalFormatada = `${consulta.horaFinal.slice(0,2)}:${consulta.horaFinal.slice(2)}`
                 console.log(`   Data           H.Ini    H.Fim    Nome 
-${consulta.data}        ${horaInicialFormatada}    ${horaFinalFormatada}  ${consulta.paciente}`);
+${consulta.data}         ${consulta.horaInicial}     ${consulta.horaFinal}  ${paciente.nome}`);
             });
         }
     }
-    
-
-
 }
 
-
-
-
 export default ConsultaController;
+

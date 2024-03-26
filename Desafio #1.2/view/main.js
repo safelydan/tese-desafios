@@ -60,7 +60,7 @@ async function menuCadastro() {
           Falha ao cadastrar o paciente.`);
           }
         }
-        break;
+        break; 
 
       case "2-Excluir paciente":
         await excluirPacienteExistente(cadastro);
