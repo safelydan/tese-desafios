@@ -4,6 +4,7 @@ import Consulta from '../models/Consulta.js';
 class ConsultaController {
     constructor() {
         this.consultas = [];
+        this.pacientes = []
     }
 
     async agendarConsultaInterativa() {
@@ -279,8 +280,10 @@ class ConsultaController {
             console.log("Consultas agendadas:");
             this.consultas.forEach((consulta, index) => {
                 console.log(`Consulta ${index + 1}:`);
+                const horaInicialFormatada = `${consulta.horaInicial.slice(0,2)}:${consulta.horaInicial.slice(2)}`
+                const horaFinalFormatada = `${consulta.horaFinal.slice(0,2)}:${consulta.horaFinal.slice(2)}`
                 console.log(`   Data           H.Ini    H.Fim    Nome 
-${consulta.data}         ${consulta.horaInicial}     ${consulta.horaFinal}${consulta.paciente}`);
+${consulta.data}        ${horaInicialFormatada}    ${horaFinalFormatada}  ${consulta.paciente}`);
             });
         }
     }
