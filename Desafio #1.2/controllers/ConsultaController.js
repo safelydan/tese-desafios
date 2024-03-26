@@ -272,21 +272,19 @@ class ConsultaController {
 
     }
 
-        listarConsultas() {
+    listarConsultas() {
         if (this.consultas.length === 0) {
             console.log("Não há consultas agendadas.");
         } else {
             console.log("Consultas agendadas:");
             this.consultas.forEach((consulta, index) => {
                 console.log(`Consulta ${index + 1}:`);
-                console.log(`Paciente: ${consulta.paciente}`);
-                console.log(`Data: ${consulta.data}`);
-                console.log(`Hora Inicial: ${consulta.horaInicial}`);
-                console.log(`Hora Final: ${consulta.horaFinal}`);
-                console.log("---------------------------------------");
+                console.log(`   Data           H.Ini    H.Fim    Nome 
+${consulta.data}         ${consulta.horaInicial}     ${consulta.horaFinal}${consulta.paciente}`);
             });
         }
     }
+    
 
 
 }
