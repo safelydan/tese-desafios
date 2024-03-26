@@ -9,8 +9,6 @@ class ConsultaController {
     async agendarConsultaInterativa() {
         const dadosConsulta = await this.obterDadosConsulta();
         const consulta = new Consulta(dadosConsulta.paciente, dadosConsulta.data, dadosConsulta.horaInicial, dadosConsulta.horaFinal);
-        console.log("Dados da consulta:", dadosConsulta);
-
 
         if (!this.validarFormatoCPF(dadosConsulta.paciente)) {
             console.log("Erro: Formato de CPF inválido.");
@@ -28,7 +26,6 @@ class ConsultaController {
         }
 
         if (!this.validarDataFutura(dadosConsulta.data)) {
-            console.log("Erro: A data da consulta deve ser no futuro.");
             return;
         }
 
@@ -140,7 +137,6 @@ class ConsultaController {
         }
 
         if (consultaDate.getTime() > currentDate.getTime()) {
-            console.log("A data da consulta está no futuro.");
             return true;
         } else if (consultaDate.getTime() === currentDate.getTime()) {
             console.log("A data da consulta é igual à data atual.");
@@ -198,7 +194,6 @@ class ConsultaController {
             return false;
         }
 
-        console.log("Data:", data);
 
         const [dia, mes, ano] = data.split('/');
 
