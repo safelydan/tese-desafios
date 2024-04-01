@@ -16,27 +16,24 @@ O objetivo do projeto é realizar a validação de dados de clientes de um arqui
 
 1. Clone este repositório:
 
-   \`\`\`bash
+   ```bash
    git clone https://github.com/safelydan/tese-desafios.git
-   \`\`\`
 
 2. Execute a aplicação, passando o caminho do arquivo JSON de entrada como argumento:
 
-   \`\`\`bash
+   ```bash
    node validacao.js caminho/do/arquivo.json
-   \`\`\`
 
 ## Exemplo de Estrutura do Arquivo JSON
 
-\`\`\`json
+```json
 [
-    {
-        "nome": "Fulano de Tal",
-        "cpf": "12345678900",
-        "data_nascimento": "01011990",
-        "renda_mensal": 2500.00,
-        "estado_civil": "S"
-    },
-    ...
+ {
+     "nome": "Fulano de Tal",
+     "cpf": "12345678900",
+     "data_nascimento": "01011990",
+     "renda_mensal": 2500.00,
+     "estado_civil": "S"
+ },
+ ...
 ]
-\`\`\`
