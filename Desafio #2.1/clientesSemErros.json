@@ -1,0 +1,16 @@
+[
+    {
+        "nome": "Fulano de Tal",
+        "cpf": "12345678900",
+        "data_nascimento": "01011990",
+        "renda_mensal": 2500.00,
+        "estado_civil": "S"
+    },
+    {
+        "nome": "Beltrano Silva",
+        "cpf": "98765432100",
+        "data_nascimento": "15071980",
+        "renda_mensal": 3500.50,
+        "estado_civil": "C"
+    }
+]
