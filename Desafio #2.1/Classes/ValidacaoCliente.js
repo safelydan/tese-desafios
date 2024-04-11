@@ -21,6 +21,7 @@ class ValidacaoCliente {
         client.data_nascimento.substring(2, 4) - 1,
         client.data_nascimento.substring(0, 2)
       );
+      
       const currentDate = new Date();
       const ageDiffMs = currentDate - birthDate;
       const ageDate = new Date(ageDiffMs);

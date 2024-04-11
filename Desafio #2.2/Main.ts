@@ -1,24 +1,24 @@
-import CurrencyController from './controller/CurrencyController';
+import ControladorDeMoedas from './controller/ControladorDeMoedas.ts'
 
-async function main() {
-    const controller = new CurrencyController('aca31cd88e75552d3c7fe3f6');
+async function principal() {
+    const controlador = new ControladorDeMoedas('aca31cd88e75552d3c7fe3f6');
     const readline = require('readline').createInterface({
         input: process.stdin,
         output: process.stdout
     });
 
-    readline.question('Moeda origem (por exemplo USD): ', async (fromCurrency: string) => {
-        readline.question('Moeda destino (por exemplo EUR): ', async (toCurrency: string) => {
-            readline.question('Valor a ser convertido: ', async (amountInput: string) => {
-                const amount = parseFloat(amountInput);
+    readline.question('Moeda origem (por exemplo USD): ', async (moedaOrigem: string) => {
+        readline.question('Moeda destino (por exemplo EUR): ', async (moedaDestino: string) => {
+            readline.question('Valor a ser convertido: ', async (valorInput: string) => {
+                const valor = parseFloat(valorInput);
                 
-                const result = await controller.handleConversion(fromCurrency, toCurrency, amount);
+                const resultado = await controlador.lidarComConversao(moedaOrigem, moedaDestino, valor);
                 
-                if (typeof result === 'string') {
-                    console.error(result);
+                if (typeof resultado === 'string') {
+                    console.error(resultado);
                 } else {
-                    console.log(`${amount} ${fromCurrency} => ${result.convertedAmount} ${toCurrency}`);
-                    console.log(`Taxa: ${result.exchangeRate}`);
+                    console.log(`${valor} ${moedaOrigem} => ${resultado.valorConvertido} ${moedaDestino}`);
+                    console.log(`Taxa: ${resultado.taxaDeCambio}`);
                 }
 
                 readline.close();
@@ -27,4 +27,4 @@ async function main() {
     });
 }
 
-main();
+principal();
