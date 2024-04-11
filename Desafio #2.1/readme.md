@@ -22,7 +22,7 @@ O objetivo do projeto é realizar a validação de dados de clientes de um arqui
 2. Execute a aplicação, passando o caminho do arquivo JSON de entrada como argumento:
 
    ```bash
-   node validacao.js caminho/do/arquivo.json
+   node main.js caminho/do/arquivo.json
 
 ## Exemplo de Estrutura do Arquivo JSON
 
