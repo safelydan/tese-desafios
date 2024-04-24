@@ -2,7 +2,31 @@
 
 Este repositório contém a implementação de um sistema de gestão de consultório odontológico em Node.js/Express/Sequelize/PostgreSQL. O sistema oferece as seguintes funcionalidades:
 
-Para rodar utilize o arquivo main dentro da pasta view
+# Instruções para Configuração e Execução do Aplicativo
+
+## Instalação de Dependências
+
+Antes de prosseguir, certifique-se de ter as dependências necessárias instaladas. Para fazer isso, execute o seguinte comando na raiz do projeto:
+
+```bash
+   npm install
+```
+
+## Configuração do Banco de Dados
+
+1. Execute o arquivo `sync.js` localizado na pasta `models`. Isso criará as tabelas necessárias no banco de dados.
+
+
+```bash
+   node sync
+```
+
+## Execução da Aplicação
+
+Utilize o arquivo `menuPrincipal` localizado na pasta `view` para iniciar a aplicação.
+```bash
+   node menuPrincipal
+```
 
 ## Funcionalidades
 
