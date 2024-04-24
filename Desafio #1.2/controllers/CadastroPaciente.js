@@ -1,4 +1,4 @@
-import Paciente from "../models/Paciente.js";
+import Paciente from "./models/Paciente.js";
 import inquirer from "inquirer";
 
 class CadastroPaciente {
