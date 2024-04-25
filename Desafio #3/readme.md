@@ -14,7 +14,7 @@ Antes de prosseguir, certifique-se de ter as dependências necessárias instalad
 
 ## Configuração do Banco de Dados
 
-1. Execute o arquivo `sync.js` localizado na pasta `models`. Isso criará as tabelas necessárias no banco de dados.
+Execute o arquivo `sync.js` localizado na pasta `models`. Isso criará as tabelas necessárias no banco de dados.
 
 
 ```bash

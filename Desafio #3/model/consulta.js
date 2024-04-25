@@ -10,9 +10,44 @@ export class Consulta extends Model {
           type: DataTypes.INTEGER, 
           allowNull: false,
         },
-        data: DataTypes.DATEONLY,
-        horaInicial: DataTypes.TIME,
-        horaFinal: DataTypes.TIME,
+        data: {
+          type: DataTypes.DATEONLY,
+          allowNull: false,
+          validate: {
+            isFutureDate(value) {
+              if (value < new Date()) {
+                throw new Error('A data da consulta deve ser futura.');
+              }
+            }
+          }
+        },
+        horaInicial: {
+          type: DataTypes.TIME,
+          allowNull: false,
+          validate: {
+            isHourFormat(value) {
+              if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) {
+                throw new Error('Formato de hora inválido. Use o formato HH:MM.');
+              }
+            }
+          }
+        },
+        horaFinal: {
+          type: DataTypes.TIME,
+          allowNull: false,
+          validate: {
+            isHourFormat(value) {
+              if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) {
+                throw new Error('Formato de hora inválido. Use o formato HH:MM.');
+              }
+            },
+            isGreaterThanInitial(value) {
+              if (value <= this.horaInicial) {
+                throw new Error('A hora final deve ser maior que a hora inicial.');
+              }
+            }
+          }
+        },
       },
       {
         sequelize,

@@ -9,42 +9,47 @@ class Paciente extends Model {
         primaryKey: true,
         autoIncrement: true
       },
-      nome: DataTypes.STRING,
-      cpf: DataTypes.STRING,
-      dataNascimento: DataTypes.DATEONLY
+      nome: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          validarNome(value) {
+            if (value.length <= 4) {
+              throw new Error("O nome deve ter ao menos 5 caracteres");
+            }
+          }
+        }
+      },
+      cpf: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          validarCPF(value) {
+            if (!/^\d{11}$/.test(value)) {
+              throw new Error("CPF inválido. Por favor, digite corretamente");
+            }
+          }
+        }
+      },
+      dataNascimento: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+          validarDataNascimento() {
+            const dataNascimento = new Date(this.dataNascimento);
+            const hoje = new Date();
+            const diferencaMilissegundos = hoje.getTime() - dataNascimento.getTime();
+            const idade = diferencaMilissegundos / (1000 * 60 * 60 * 24 * 365.25);
+            if (idade < 18) {
+              throw new Error("O paciente deve ter pelo menos 18 anos de idade.");
+            }
+          }
+        }
+      }
     }, {
       sequelize,
       modelName: 'Paciente'
     });
-  }
-
-  validarCPF() {
-    return /^\d{11}$/.test(this.cpf);
-  }
-
-  validarNome() {
-    if (this.nome.length <= 4) {
-      console.log("O nome deve ter ao menos 5 caracteres");
-      return false;
-    }
-    return true;
-  }
-
-  calcularIdade() {
-    const dataNascimento = new Date(this.dataNascimento);
-    const hoje = new Date();
-    const diferencaMilissegundos = hoje.getTime() - dataNascimento.getTime();
-    return diferencaMilissegundos / (1000 * 60 * 60 * 24 * 365.25);
-  }
-
-  validarDataNascimento() {
-    const idade = this.calcularIdade();
-    return idade >= 18;
-  }
-
-  validarIdadeMinima(idadeMinima) {
-    const idade = this.calcularIdade();
-    return idade >= idadeMinima;
   }
 }
 

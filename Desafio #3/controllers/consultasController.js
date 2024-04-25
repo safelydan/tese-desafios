@@ -47,6 +47,13 @@ CPF: ${paciente.toJSON().cpf}`);
         name: "data",
         message: "Data da consulta (DD/MM/AAAA): ",
         validate: function (data) {
+          const dataAtual = moment();
+          const dataConsulta = moment(data, "DD/MM/YYYY");
+          const horaAtual = moment().format("HH:mm");
+
+          if (!dataConsulta.isAfter(dataAtual, 'day') || (dataConsulta.isSame(dataAtual, 'day') && moment(horaInicial, "HH:mm").isBefore(horaAtual, 'minute'))) {
+            return "A data da consulta deve ser no futuro.";
+          }
           return (
             /^\d{2}\/\d{2}\/\d{4}$/.test(data) ||
             "Data da consulta inválida. Por favor, digite no formato: DD/MM/AAAA"

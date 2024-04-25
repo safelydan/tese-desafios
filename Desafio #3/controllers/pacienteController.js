@@ -20,11 +20,15 @@ export async function cadastrarPaciente() {
         type: "input",
         name: "cpf",
         message: "CPF do paciente: ",
-        validate: function (cpf) {
-          return (
-            /^\d{11}$/.test(cpf) ||
-            "CPF inválido. Por favor digite corretamente"
-          );
+        validate: async function (cpf) {
+          if (!/^\d{11}$/.test(cpf)) {
+            return "CPF inválido. Por favor digite corretamente";
+          }
+          const pacienteExistente = await Paciente.findOne({ where: { cpf: cpf } });
+          if (pacienteExistente) {
+            return "Já existe um paciente cadastrado com esse CPF";
+          }
+          return true;
         },
       },
       {
